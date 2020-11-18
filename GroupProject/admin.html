@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+        <link rel="stylesheet" href="admin.css">
+        <style>
+            #con a{
+                margin: 10px;
+            }
+            #in{
+                position: absolute;
+                top: 150px;
+                margin-left: 45%;
+                display: none;
+            }
+            #modify{
+                position: absolute;
+                top: 150px;
+                margin-left: 45%;
+                display: none;
+                border-radius: 25px;
+            }
+            #rec{
+                height: 100px;
+            }
+            body{
+                font-size: 50px;
+            }
+            #add{
+                font-size: 30px;
+                border-radius: 20px;
+                font-weight: bold;
+                width: 100px;
+            }
+            textarea{
+                width: 400px;
+            }
+            input{
+                width: 400px;
+                height: 30px;
+            }
+            #addCommit{
+                font-size: 30px;
+                border-radius: 25px;
+                width: 100px;
+                font-weight: bold;
+            }
+            .ww{
+                font-size: 50px;
+                border-radius: 25px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="nav">
+            <a href="./adminLogin.html">Admin</a>
+            <a href="login.html">Login</a>
+            <a href="feedback.html">Feedback</a>
+            <a href="index.html">Home</a>
+        </div>
+
+        <div class="func">
+            <button id="add">ADD</button>
+        </div>
+        <div id="con"></div>
+        <div id="in">
+            <div>
+                <label name="uni">Enter University:</label>
+                <br>
+                <input type="text" id="school">
+            </div>
+            <div>
+                <label name="rate">Enter Rate:</label>
+                <br/>
+                <input type="text" id="fen">
+            </div>
+            <div>
+                <label name="aboutUs">Enter About Us:</label>
+                <br/>
+                <textarea type="text" id="rec"></textarea>
+            </div>
+            <div>
+                <button id="addCommit">Add</button>
+            </div>
+        </div>
+        <div id="modify">
+            <div>
+                <label name="rate">Enter Rate:</label>
+                <br/>
+                <input class="" type="text" id="comment">
+            </div>
+            <div>
+                <label name="aboutUs">Enter About Us:</label>
+                <br/>
+                <textarea type="text" id="recM"></textarea>
+            </div>
+            <div>
+                <button class="ww">Modify</button>
+            </div>
+        </div>
+    </body>
+    <script>
+        $.get("./php/getSchool.php",function(data){
+            var data = $.parseJSON(data)
+            var i = 0;
+            var d 
+            for(i;i<data.length;i++){
+                d = '<a id='+data[i]['id']+' href="./comment.html?id='+data[i]['id']+'"'+'>Detail</a>';
+                $('#con').append("<p>"+data[i]['name']+"</p>")
+                $('#con').append("<p> Rate："+data[i]['comment']+"</p>")
+                $('#con').append(d)
+                $('#con').append('<button class="delete" id="'+data[i]['id']+'">Delete</button>')
+                $('#con').append('<button class="modify" id="'+data[i]['id']+'">Modify</button>')
+            }
+        });
+        $("#con").on("click",".delete",function(){
+            var id = $(this).attr('id')
+            $.post("./php/delete.php",
+                {
+                    id: id
+                },
+                function(data){
+                    if (data=="success"){
+                        $(window).attr('location','./admin.html');
+                    }
+                    alert(data);
+                });
+        });
+        $("#con").on("click",".modify",function(){
+            $("#modify").css("display","block")
+            $("#modify button").attr('class',$(this).attr('id'))
+        });
+        $("#modify").on("click","button",function(){
+            
+            var comment = $("#comment").val()
+            // alert(comment)
+            var brief = $("#recM").val()
+            var id = $(this).attr('class')
+            $.post("./php/set.php",
+                {
+                    id: id,
+                    comment:comment,
+                    brief: brief
+                },
+                function(data){
+                    if (data=="success"){
+                        $(window).attr('location','./admin.html');
+                    }
+                    alert(data);
+                });
+        });
+        $("#add").click(function(){
+            $("#in").css('display',"block")
+
+        })
+        $("#addCommit").click(function(){
+            var name = $("#school").val()
+            var fen = $("#fen").val()
+            var brief = $("#rec").val()
+            $.post("./php/add.php",
+                {
+                    school: name,
+                    comment: fen,
+                    brief: brief
+                },
+                function(data){
+                    alert(data);
+                    if(data=='success'){
+                        $(window).attr('location','./admin.html');
+                    }
+                });
+                $("#in").css('display',"none")
+        })
+    </script>
+</html>

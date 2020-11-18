@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Feedback</title>
+        <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+        <link rel="stylesheet" href="admin.css">
+		<style>
+			body{
+				font-size: 40px;
+			}
+			h1{
+				text-align: center;
+				font-size: 50px;
+			}
+			form{
+				margin: 30px 20px;
+				font-size: 30px;
+			}
+			input{
+                width: 200px;
+                height: 30px;
+                border-radius: 25px;
+            }
+            #modify{
+                position: absolute;
+                top: 150px;
+                margin-left: 45%;
+                display: none;
+            }
+            #comm{
+                position: absolute;
+                top: 150px;
+                margin-left: 45%;
+                display: none;
+            }
+            .head{
+                display: flex;
+            }
+            .search{
+                margin-left: 200px;
+            }
+            .comp{
+                position: absolute;
+                top: 150px;
+                margin-left: 45%;
+                display: none;
+            }
+            .search{
+                margin-left: 200px;
+            }
+            .name{
+                width: 80%;
+                height: 40px;
+            }
+            #search{
+                font-size: 25px;
+                border-radius: 25px;
+                font-weight: bold;
+                width: 100px;
+                text-align: center;
+                margin: 20px 0 0 0;
+            }
+            .compB{
+                font-size: 28px;
+                border-radius: 25px;
+                width: 130px;
+                height: 40px;
+                font-weight: bold;
+                margin: 30px 0 0 0;
+            }
+            .comp{
+                margin: 0 0 0 40%;
+            }
+            .box{
+               margin-left: 20px; 
+            }
+            .comment{
+                width: 350px;
+            }
+            .rate{
+                width: 200px;
+            }
+		</style>
+    </head>
+
+    <div class="nav">
+        <a href="./adminLogin.html">Admin</a>
+        <a href="login.html">Login</a>
+        <a href="feedback.html">Feedback</a>
+        <a href="index.html">Home</a> 
+    </div>
+    <body>
+        <div class="search">
+            <input type="text" class="name">
+            <button id="search">Search</button>
+        </div>
+        <div class="box">
+            <button class="compB">Compare</button>
+            <br>
+            <label name="uni">College & Universities:</label>
+            <br>
+            <div id="index">
+                <div class="in">
+                    <p>Username</p>
+                    <input type="text" name="" id="username">
+                </div>
+                <div class="in">
+                    <p>Password</p>
+                    <input type="password" name="" id="password">
+                </div>
+                <div class="in">
+                    <button id='login'>Login</button>
+                </div>
+            </div>
+            <div id="con"></div>
+            <div id="modify">
+                <div>
+                    Enter Rate:
+                    <br>
+                    <input class="rate" type="text" id="comment">
+                </div>
+                <div>
+                    <button class="ww">Modify</button>
+                </div>
+            </div>
+            <div id="comm">
+                <div>
+                    Enter Your Comment:
+                    <br>
+                    <input class="comment" type="text" id="comment">
+                </div>
+                <div>
+                    <button class="submit">Comment</button>
+                </div>
+            </div>
+            <div class="comp">
+                Name1:<input type="text" class="name1">
+                Name2:<input type="text" class="name2">
+                <button class="comSubmit">Compare</button>
+            </div>
+        </div>
+    </body>
+    <script>
+        $.get("./php/getSchool.php",function(data){
+            var data = $.parseJSON(data)
+            var i = 0;
+            var d 
+            for(i;i<data.length;i++){
+                d = '<a id='+data[i]['id']+' href="./comment.html?id='+data[i]['id']+'"'+'>Detail</a>';
+                $('#con').append("<p>"+data[i]['name']+"</p>")
+                $('#con').append("<p> Rate："+data[i]['comment']+"</p>")
+                $('#con').append(d)
+                $('#con').append('<button class="grade" id="'+data[i]['id']+'">Grades</button>')
+                $('#con').append('<button class="com" id="'+data[i]['id']+'">Comment</button>')
+            }
+            
+        });
+        $(".login").click(function(){
+            $("#index").css("display","block")
+        })
+        $('#login').click(function(){
+                var username = $('#username').val();
+                var password = $('#password').val();
+                $.post("./php/adminLogin.php",
+                {
+                    username: username,
+                    password: password
+                },
+                function(data){
+                    alert(data);
+                    if(data=='success'){
+                        $("#index").css("display","none")
+                        $(".login").css("display","none")
+                    }
+                });
+            })
+            $("#con").on("click",".grade",function(){
+                var id = $(this).attr('id')
+                if($("#modify").css("display")=="block"){
+                    $("#modify").css("display","none")
+                }else{
+                    $("#modify").css("display","block")
+                }
+                
+                $("#modify").attr("class",id)
+                
+            // alert($("#modify").attr("class"))
+            
+        });
+        $("#con").on("click",".com",function(){
+                var id = $(this).attr('id')
+                if($("#comm").css("display")=="block"){
+                    $("#comm").css("display","none")
+                }else{
+                    $("#comm").css("display","block")
+                }
+                
+                $("#comm").attr("class",id)
+                
+            // alert($("#modify").attr("class"))
+            
+        });
+        $(".ww").click(function(){
+            var id = $("#modify").attr("class")
+            var comment = $("#modify input").val();
+            $.post("./php/modify.php",
+                {
+                    id: id,
+                    comment:comment
+                },
+                function(data){
+                    if (data=="success"){
+                        $(window).attr('location','./index.html');
+                    }
+                    alert(data);
+                    $("#modify").css("display","none")
+                });
+            
+        })
+        $(".submit").click(function(){
+            var id = $("#comm").attr("class")
+            var comment = $("#comm input").val();
+            
+            $.post("./php/comment.php",
+                {
+                    id: id,
+                    comment:comment
+                },
+                function(data){
+                    if (data=="success"){
+                        $(window).attr('location','./index.html');
+                    }
+                    alert(data);
+                    $("#modify").css("display","none")
+                    
+                });
+            
+        })
+        $("#search").click(function(){
+            var name = $(".name").val()
+            if(name==null){
+                return
+            }
+            $.post("./php/search.php",
+                {
+                    name: name,
+                },
+                function(data){
+                    $('#con').empty()
+                    var data = $.parseJSON(data)
+                    var i = 0;
+                    var d 
+                    for(i;i<data.length;i++){
+                        d = '<a id='+data[i]['id']+' href="./comment.html?id='+data[i]['id']+'"'+'>Detail</a>';
+                        $('#con').append("<p>"+data[i]['name']+"</p>")
+                        $('#con').append("<p> Rate:"+data[i]['comment']+"</p>")
+                        $('#con').append(d)
+                        $('#con').append('<button class="grade" id="'+data[i]['id']+'">Grade</button>')
+                        $('#con').append('<button class="com" id="'+data[i]['id']+'">Comment</button>')
+                    }
+                });
+        })
+        $(".compB").click(function(){
+            if($(".comp").css("display")=="none"){
+                $(".comp").css("display","block")
+            }else{
+                $(".comp").css("display","none")
+            }
+        })
+        $(".comSubmit").click(function(){
+            var name1 =  $(".name1").val()
+            var name2 = $(".name2").val()
+            $.post("./php/compare.php",
+                {
+                    name1: name1,
+                    name2: name2
+                },
+                function(data){
+                    
+                    alert(data);
+                    $(".comp").css("display","none") 
+            })
+        })
+    </script>
+</html>

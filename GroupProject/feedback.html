@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Feedback</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="admin.css">
+		<style>
+			body{
+				font-size: 20px;
+			}
+			h1{
+				text-align: center;
+				font-size: 50px;
+			}
+			form{
+				margin: 30px 20px;
+				font-size: 30px;
+			}
+			input{
+                width: 300px;
+                height: 30px;
+                border-radius: 25px;
+			}
+			button{
+                border-radius: 25px;
+                text-align: center;
+                width: 85px;
+                height: 30px;
+                font-size: 20px;
+                font-weight: bold;
+			}
+			select{
+				width: 300px;
+				height: 30px;
+				font-size: 18px;
+			}
+			form ::placeholder{
+				font-size: 17px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="nav">
+            <a href="adminLogin.html">Admin</a>
+            <a href="login.html">Login</a>
+            <a href="feedback.html">Feedback</a>
+            <a href="index.html">Home</a> 
+		</div>
+
+		<h1>College Feedback Submission</h1>
+		<form action="verifyFeedback.php" method="post">
+			<label>Please enter your prefered College: </label>
+			<br>
+			<input type="text" name="college" placeholder=" College Name">
+			<br><br>
+			<label>What do you think about this college?</label>
+			<br>
+			<input type="text" name="review" placeholder=" Review">
+			<br><br>
+			<label>What course you will be taking in this college?</label>
+			<br>
+			<select name="course">
+				<option value="Diploma in Accounting">Diploma in Accounting</option>
+				<option value="Diploma in Business">Diploma in Business</option>
+				<option value="Diploma in Culinary Arts">Diploma in Culinary Arts</option>
+				<option value="Diploma in Information Technology">Diploma in Information Technology</option>
+				<option value="Diploma in Graphic Design">Diploma in Graphic Design</option>
+				<option value="Diploma in Hotel Management">Diploma in Hotel Management</option>
+			</select>
+			<br><br>
+			<label>Is there any feedback to improve the college?</label>
+			<br>
+			<input type="text" name="feedback" placeholder=" Feedback">
+			<br><br>
+			<label>How likely are you to recommended this college to a friend?</label>
+			<br>
+			<span class="radio">
+				<input type="radio" name="recommend" value="unlikely"> Unlikely
+				<input type="radio" name="recommend" value="likely"> Likely
+				<input type="radio" name="recommend" value="certainly"> Certainly
+			</span>
+			<br><br>
+			<label>Please leave your name and email so that we could contact you</label>
+			<br><br>
+			<label>Phone</label>
+			<br>
+			<input type="text" name="phone" placeholder=" Phone">
+			<br><br>
+			<label>E-mail</label>
+			<br>
+			<input type="text" name="mail" placeholder=" Email">
+			<br><br>
+			<button id='submit'>Submit</button>
+		</form>
+	</body>
+</html>

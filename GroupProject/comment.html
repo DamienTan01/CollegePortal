@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+        <link rel="stylesheet" href="admin.css">
+        <style>
+            #has{
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="nav">
+            <a href="./adminLogin.html">Admin</a>
+            <a href="login.html">Login</a>
+            <a href="feedback.html">Feedback</a>
+            <a href="index.html">Home</a> 
+        </div>
+
+        <div class="title"></div>
+        <div>
+            <h3>About Us:</h3>
+            <div class="biref"></div>
+        </div>
+        <div id="con">
+            <div id="has">No comments posted~</div>
+        </div>
+    </body>
+
+    <script>
+        var url = window.location.href
+        var id = url.split("=")[1]
+        $.post("./php/getComment.php",
+            {
+                id: id,
+            },
+            function(data){
+                var data = $.parseJSON(data)
+                var i = 0
+                if(data.length==0){
+                    $("#has").css('display',"block")
+                }
+                for(i;i<data.length;i++){
+                    $('#con').append("<p>"+data[i]['content']+"---"+data[i]['username']+"</p>")
+                    $('#con').append("<p> time:"+data[i]['time']+"</p>")
+                }
+            })
+            $.post("./php/getName.php",
+            {
+                id: id,
+            },
+            function(data){
+                var data = $.parseJSON(data)
+                $(".title").append('<h1>'+data[0]['name']+'<h1>')  
+            })
+            $.post("./php/get.php",
+            {
+                id: id,
+            },
+            function(data){
+                var data = $.parseJSON(data)
+                $(".biref").append('<p>'+data[0]['brief']+'</p>')
+            })
+    </script>
+</html>
